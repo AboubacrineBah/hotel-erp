@@ -1,58 +1,130 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏨 Hôtels & Resorts — Vitrine Client & ERP Hôtelier (PWA / Laravel)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Application web **Mobile-First / Progressive Web App (PWA)** développée sous **Laravel** réunissant une **vitrine publique de réservation hôtelière** (inspirée de l'expérience *Warm Luxury* du Groupe Hôtels) et un **ERP hôtelier complet** protégé par contrôle d'accès basé sur les rôles (**RBAC**).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Fonctionnalités Principales
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Espace Visiteur Public & Expérience Client
+- **Interface Publique Épurée :** Navigation pensée pour le visiteur anonyme (Destinations phares : *Abidjan, Bamako, Dakar, Cotonou, Ouagadougou*, Expériences & Gastronomie, Club Fidélité *Hotel Nomad*).
+- **Moteur de Réservation Temps Réel :** Calcul dynamique des nuitées, sélection d'options VIP (Transfert Aéroport, Demi-Pension) et tarification en **XOF**.
+- **Facturation PDF Instantanée :** Génération automatique d'une facture normalisée (HT, TVA hôtelière 18%, Net à Payer TTC) téléchargeable et imprimable au format A4 via **DomPDF**.
+- **Programme Fidélité Azalaï Nomad :** Cumul automatique de points à chaque séjour pour les membres connectés.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. Back-Office ERP Hôtelier & Privilèges (RBAC)
+Pilotage centralisé avec cloisonnement strict des droits via **Spatie Laravel Permission** :
+- **Réservations & CRM :** Suivi des dossiers clients, validation des check-ins et synchronisation temps réel avec les réservations publiques.
+- **Facturation & Comptabilité :** Registre des factures encaissées, suivi du chiffre d'affaires (visible uniquement par les profils autorisés) et export PDF.
+- **Stock & Économat :** Gestion des stocks Minibar, Restaurant & Cave avec alertes de seuil critique et réapprovisionnement rapide.
+- **Ressources Humaines (RH) :** Gestion des brigades par hôtel, plannings, bascule présence/congé et visibilité sécurisée des rémunérations.
+- **Administration & Matrice RBAC (Super Admin) :** Création de comptes, attribution dynamique des rôles et activation/suspension d'accès.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🔐 Comptes de Démonstration (Seeder RBAC)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Après exécution de `php artisan db:seed`, les 5 profils suivants sont prêts à l'emploi (Mot de passe commun : **`Azalai2026`**) :
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+| Rôle Système | Utilisateur | Email de Connexion | Privilèges & Périmètre |
+| :--- | :--- | :--- | :--- |
+| **`super_admin`** | Moussa Keïta | `dg@azalai.com` | Accès complet (Tous modules, Finances, Salaires, Admin RBAC) |
+| **`reception`** | Fatou Ndiaye | `reception@azalai.com` | Réservations, Check-in CRM & Facturation clients |
+| **`stock`** | Ousmane Bamba | `stock@azalai.com` | Stock Minibar, Restaurant, Alertes & Réapprovisionnement |
+| **`hr`** | Kadiatou Traoré | `rh@azalai.com` | Effectifs RH, Plannings, Présences & Salaires |
+| **`vip_client`** | Amadou Diallo | `amadou.diallo@vip.com` | Vitrine Publique, Mes Séjours, Factures & Points Nomad |
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 🛠️ Stack Technique
+
+- **Serveur Local :** Windows + XAMPP (Apache, MySQL, PHP 8.2 / 8.3)
+- **Backend :** Laravel 11/12, Spatie Laravel Permission, Barryvdh DomPDF
+- **Frontend & Mobile :** Bootstrap 5, Sass, FontAwesome 6, Vite, `vite-plugin-pwa`
+- **Qualité & CI/CD :** PHPUnit, Laravel Pint (PSR-12), GitHub Actions (`.github/workflows/site-check.yml`)
+
+---
+
+## 🚀 Installation & Lancement Local (XAMPP)
+
+### 1. Prérequis
+- **XAMPP** installé avec **Apache** et **MySQL** démarrés.
+- **PHP >= 8.2**, **Composer** et **Node.js >= 20** configurés dans le `PATH` Windows.
+
+### 2. Cloner le dépôt & installer les dépendances
+Ouvrez un terminal dans `C:\xampp\htdocs` :
 
 ```bash
-composer require laravel/boost --dev
+git clone https://github.com/TON-UTILISATEUR/azalai-erp-laravel.git azalai-erp
+cd azalai-erp
 
-php artisan boost:install
+# Dépendances PHP
+composer install
+
+# Dépendances Front-End & PWA
+npm install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 3. Configuration de l'environnement (`.env`) & Base de données
+1. Créez une base de données MySQL nommée **`hotel-erp`** (`utf8mb4_unicode_ci`) via **phpMyAdmin** (`http://localhost/phpmyadmin`).
+2. Copiez le fichier d'environnement et générez la clé de sécurité :
 
-## Contributing
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. Vérifiez les paramètres de connexion MySQL dans `.env` :
 
-## Code of Conduct
+```env
+APP_NAME="Hôtels & Resorts ERP"
+APP_URL=http://127.0.0.1:8000
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=hotel-erp
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Security Vulnerabilities
+### 4. Migrations & Peuplement des données initiales
+Exécutez les migrations et les seeders pour créer les tables, les rôles RBAC, les 5 hôtels Azalaï et les comptes de démonstration :
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan migrate --seed
+```
 
-## License
+### 5. Démarrage de l'application
+Lancez le serveur de compilation Vite et le serveur Laravel dans deux terminaux distincts :
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+# Terminal 1 : Assets Bootstrap 5, Sass & PWA
+npm run dev
+
+# Terminal 2 : Serveur Web Laravel
+php artisan serve
+```
+
+Ouvrez votre navigateur sur **`http://127.0.0.1:8000`**.
+
+---
+
+## 🧪 Tests, Qualité & Sécurité
+
+```bash
+# Exécuter les tests fonctionnels & RBAC (PHPUnit)
+php artisan test
+
+# Vérifier le formatage PSR-12 (Laravel Pint)
+./vendor/bin/pint --test
+
+# Audits de sécurité
+composer audit
+npm audit --audit-level=moderate
+```
+
+---
+
+## 📄 Licence
+Projet développé par **NexaWeb Mali** — Tous droits réservés.
