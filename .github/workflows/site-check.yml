@@ -1,0 +1,57 @@
+name: Hotel ERP - CI/CD Quality, Security & Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  laravel-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Récupération du code source
+        uses: actions/checkout@v4
+
+      - name: 2. Installation de PHP 8.3 & extensions Laravel
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, fileinfo, sqlite3, pdo_sqlite, gd
+          coverage: none
+
+      - name: 3. Installation de Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 4. Installation des dépendances Composer
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: 5. Préparation de l'environnement de test (.env)
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          touch database/database.sqlite
+
+      - name: 6. Audit de sécurité Composer
+        run: composer audit
+
+      - name: 7. Vérification de la norme PSR-12 (Laravel Pint)
+        run: ./vendor/bin/pint --test
+
+      - name: 8. Installation des dépendances NPM & Audit sécurité
+        run: |
+          npm ci
+          npm audit --audit-level=moderate
+
+      - name: 9. Compilation des assets Vite & PWA
+        run: npm run build
+
+      - name: 10. Exécution des tests fonctionnels & RBAC (PHPUnit)
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: php artisan test
