@@ -1,0 +1,19 @@
+// Fonts
+@import url('https://fonts.bunny.net/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// Variables de marque Hôtels & Resorts
+$primary: #0B192C;       // Bleu Nuit Profond
+$secondary: #C87D55;     // Terracotta Chaleureux
+$warning: #D4AF37;       // Doré Subtil
+$body-bg: #F4EBE1;       // Sable Africain Doux
+$body-color: #0B192C;
+
+// Import Bootstrap 5 & FontAwesome
+@import 'bootstrap/scss/bootstrap';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
