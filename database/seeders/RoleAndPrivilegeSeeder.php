@@ -11,11 +11,18 @@ use Spatie\Permission\PermissionRegistrar;
 
 class RoleAndPrivilegeSeeder extends Seeder
 {
+    /**
+     * Mot de passe unique pour TOUS les comptes de démonstration.
+     * Documenté partout : Hotel2026
+     */
+    public const DEMO_PASSWORD = 'Hotel2026';
+
     public function run(): void
     {
+        // Vider le cache des permissions Spatie (source fréquente de bugs)
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // 1. Création des Permissions
+        // 1. Permissions
         $permissions = [
             'access_erp',
             'view_revenue',
@@ -29,26 +36,27 @@ class RoleAndPrivilegeSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
-        // 2. Création des 5 Rôles & Attribution des Privilèges
-        $superAdmin = Role::firstOrCreate(['name' => 'super_admin']);
-        $superAdmin->givePermissionTo(Permission::all());
+        // 2. Rôles + attribution
+        $superAdmin = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        $superAdmin->syncPermissions(Permission::all());
 
-        $reception = Role::firstOrCreate(['name' => 'reception']);
-        $reception->givePermissionTo(['access_erp', 'manage_reservations', 'manage_billing']);
+        $reception = Role::firstOrCreate(['name' => 'reception', 'guard_name' => 'web']);
+        $reception->syncPermissions(['access_erp', 'manage_reservations', 'manage_billing']);
 
-        $stock = Role::firstOrCreate(['name' => 'stock']);
-        $stock->givePermissionTo(['access_erp', 'manage_stock']);
+        $stock = Role::firstOrCreate(['name' => 'stock', 'guard_name' => 'web']);
+        $stock->syncPermissions(['access_erp', 'manage_stock']);
 
-        $hr = Role::firstOrCreate(['name' => 'hr']);
-        $hr->givePermissionTo(['access_erp', 'manage_hr', 'view_salaries']);
+        $hr = Role::firstOrCreate(['name' => 'hr', 'guard_name' => 'web']);
+        $hr->syncPermissions(['access_erp', 'manage_hr', 'view_salaries']);
 
-        $vipClient = Role::firstOrCreate(['name' => 'vip_client']);
-        $vipClient->givePermissionTo(['vip_nomad_access']);
+        $vipClient = Role::firstOrCreate(['name' => 'vip_client', 'guard_name' => 'web']);
+        $vipClient->syncPermissions(['vip_nomad_access']);
 
-        // 3. Création des Comptes Utilisateurs Démo
+        // 3. Comptes démo — on FORCE la mise à jour du mot de passe et de is_active
+        //    (firstOrCreate seul ne met pas à jour si l'utilisateur existe déjà)
         $users = [
             [
                 'name' => 'Moussa Keïta',
@@ -93,18 +101,23 @@ class RoleAndPrivilegeSeeder extends Seeder
         ];
 
         foreach ($users as $u) {
-            $user = User::firstOrCreate(
+            $user = User::updateOrCreate(
                 ['email' => $u['email']],
                 [
                     'name' => $u['name'],
-                    'password' => Hash::make('Hotel2026'),
+                    'password' => Hash::make(self::DEMO_PASSWORD),
                     'phone' => $u['phone'],
                     'hotel_assignment' => $u['hotel_assignment'],
                     'nomad_points' => $u['nomad_points'],
                     'is_active' => true,
+                    'email_verified_at' => now(),
                 ]
             );
-            $user->assignRole($u['role']);
+
+            // Réattribue le rôle (évite les doublons)
+            $user->syncRoles([$u['role']]);
         }
+
+        $this->command?->info('Comptes démo prêts. Mot de passe unique : '.self::DEMO_PASSWORD);
     }
 }

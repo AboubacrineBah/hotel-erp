@@ -34,6 +34,39 @@ class HotelErpSeeder extends Seeder
             'image_url' => 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=80',
         ]);
 
+        $dakar = Hotel::firstOrCreate(['slug' => 'dakar'], [
+            'name' => 'Hôtel Dakar',
+            'city' => 'Dakar',
+            'country' => 'Senegal',
+            'badge' => '5★ Flagship Historique',
+            'address' => 'Avenue, Quartier Hotel — Dakar',
+            'description' => 'Le fleuron historique des hotels à Dakar.',
+            'min_price' => 100000,
+            'image_url' => 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=80',
+        ]);
+
+        $ouagadougou = Hotel::firstOrCreate(['slug' => 'ouagadougou'], [
+            'name' => 'Hôtel Ouagadougou',
+            'city' => 'Ouagadougou',
+            'country' => 'Burkina Faso',
+            'badge' => '3★ Flagship Historique',
+            'address' => 'Avenue, Quartier Hotel — Ouagadougou',
+            'description' => 'Le fleuron historique des hotels à Ouagadougou.',
+            'min_price' => 50000,
+            'image_url' => 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=80',
+        ]);
+
+        $accra = Hotel::firstOrCreate(['slug' => 'accra'], [
+            'name' => 'Hôtel Accra',
+            'city' => 'Accra',
+            'country' => 'Ghana',
+            'badge' => '4★ Flagship Historique',
+            'address' => 'Avenue, Quartier Hotel — Accra',
+            'description' => 'Le fleuron historique des hotels à Accra.',
+            'min_price' => 85000,
+            'image_url' => 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=80',
+        ]);
+
         // Chambres
         Room::firstOrCreate(['hotel_id' => $abidjan->id, 'name' => 'Chambre Supérieure Business'], [
             'size' => '32 m²',
@@ -50,6 +83,33 @@ class HotelErpSeeder extends Seeder
             'price_per_night' => 135000,
             'available_count' => 3,
             'perks' => ['Terrasse Privée', 'Coin Salon', 'Accès Spa & Fitness'],
+            'image_url' => 'https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80',
+        ]);
+
+        Room::firstOrCreate(['hotel_id' => $dakar->id, 'name' => 'Suite Business Teranga'], [
+            'size' => '75 m²',
+            'capacity' => 7,
+            'price_per_night' => 175000,
+            'available_count' => 4,
+            'perks' => ['Terrasse Privée', 'Coin Salon', 'Accès Spa & Fitness', 'Wi-Fi gratuit', 'Petit-dejeuner'],
+            'image_url' => 'https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80',
+        ]);
+
+        Room::firstOrCreate(['hotel_id' => $ouagadougou->id, 'name' => 'Chambre moyenne Salam'], [
+            'size' => '30 m²',
+            'capacity' => 3,
+            'price_per_night' => 110000,
+            'available_count' => 10,
+            'perks' => ['Terrasse Privée', 'Coin Salon'],
+            'image_url' => 'https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80',
+        ]);
+
+        Room::firstOrCreate(['hotel_id' => $accra->id, 'name' => 'Suite VIP Beach'], [
+            'size' => '100 m²',
+            'capacity' => 10,
+            'price_per_night' => 225000,
+            'available_count' => 2,
+            'perks' => ['Terrasse Privée', 'Coin Salon', 'Accès Spa & Fitness', 'Accès Connexion Illimitee', 'Accès Buffet', 'Vue sur mer'],
             'image_url' => 'https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80',
         ]);
 
@@ -72,6 +132,33 @@ class HotelErpSeeder extends Seeder
             'unit_price' => 2500,
         ]);
 
+        StockItem::firstOrCreate(['sku' => 'STK-03'], [
+            'hotel_id' => $dakar->id,
+            'name' => 'Jus de Coco Artisanal Bio',
+            'category' => 'Restaurant & Bar',
+            'quantity' => 28,
+            'alert_threshold' => 12,
+            'unit_price' => 3500,
+        ]);
+
+        StockItem::firstOrCreate(['sku' => 'STK-04'], [
+            'hotel_id' => $ouagadougou->id,
+            'name' => 'Boisson gazeuse Coca-Cola 33cl',
+            'category' => 'Restaurant & Bar',
+            'quantity' => 24,
+            'alert_threshold' => 12,
+            'unit_price' => 3000,
+        ]);
+
+        StockItem::firstOrCreate(['sku' => 'STK-05'], [
+            'hotel_id' => $accra->id,
+            'name' => 'Boisson energisante Monster 45cl',
+            'category' => 'Restaurant & Bar',
+            'quantity' => 39,
+            'alert_threshold' => 20,
+            'unit_price' => 5000,
+        ]);
+
         // Employés RH
         Employee::firstOrCreate(['matricule' => 'EMP-01'], [
             'hotel_id' => $bamako->id,
@@ -91,6 +178,36 @@ class HotelErpSeeder extends Seeder
             'shift_hours' => '08h00 - 16h30',
             'monthly_salary' => 420000,
             'presence_status' => 'En poste',
+        ]);
+
+        Employee::firstOrCreate(['matricule' => 'EMP-03'], [
+            'hotel_id' => $dakar->id,
+            'full_name' => 'Youssouf NDiaye',
+            'job_title' => 'Cuisinier',
+            'department' => 'Restaurant & Bar',
+            'shift_hours' => '05h00 - 20h30',
+            'monthly_salary' => 320000,
+            'presence_status' => 'En poste',
+        ]);
+
+        Employee::firstOrCreate(['matricule' => 'EMP-04'], [
+            'hotel_id' => $ouagadougou->id,
+            'full_name' => 'Diakaridia Sidibe',
+            'job_title' => 'Technicien de surface',
+            'department' => 'Étages, Room, Hall & Spa',
+            'shift_hours' => '05h00 - 09h30',
+            'monthly_salary' => 225000,
+            'presence_status' => 'En conge',
+        ]);
+
+        Employee::firstOrCreate(['matricule' => 'EMP-05'], [
+            'hotel_id' => $accra->id,
+            'full_name' => 'Clarisse Kouassi',
+            'job_title' => 'Gestionnaire',
+            'department' => 'Room',
+            'shift_hours' => '08h00 - 16h30',
+            'monthly_salary' => 450000,
+            'presence_status' => 'En conge',
         ]);
     }
 }

@@ -13,6 +13,25 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+    <!-- Navbar style -->
+    <style>
+        @media (min-width: 992px) {
+            .erp-sidebar {
+                width: 270px;
+                min-height: 100vh;
+                position: sticky;
+                top: 0;
+                height: 100vh;
+                overflow-y: auto;
+            }
+        }
+
+        /* Effet de survol sur les liens du menu */
+        .erp-sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+    </style>
+
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
